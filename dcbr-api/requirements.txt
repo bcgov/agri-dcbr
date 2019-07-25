@@ -1,5 +1,5 @@
 # Main webapp
-Django==2.2
+Django==2.2.3
 
 # Database
 psycopg2==2.8.2
