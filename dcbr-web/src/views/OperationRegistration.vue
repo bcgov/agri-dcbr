@@ -1,5 +1,5 @@
 <template>
-  <div class="grey lighten-4">
+  <v-app class="grey lighten-4">
     <v-stepper flat>
       <v-stepper-header>
         <v-stepper-step complete editable step="1">Registration</v-stepper-step>
@@ -16,21 +16,62 @@
 
     <v-content class="mx-4 mb-4 my-4">
       <v-container fluid>
-        <div>
-          <Profile ref="profile" />
-        </div>
+        <v-btn @click="prepopulate()">
+          <v-btn-text>prepopulate</v-btn-text>
+          <v-icon dark>add</v-icon>
+        </v-btn>
 
-        <div editable :complete="e6 > 2" step="2">
-          <OperationDetails ref="operationdetails" />
-        </div>
-        <BreedingDetails ref="breedingdetails" />
-        <!-- OPERATION LOCATION MENU -->
-        <div>
-          <MenuOperationLocation />
-        </div>
-        <div>
+        <v-stepper non-linear v-model="e6" vertical>
+          <v-stepper-step editable :complete="e6 > 1" step="1">Profile</v-stepper-step>
+          <v-stepper-content step="1">
+            <Profile ref="profile" />
+          </v-stepper-content>
+
+          <v-stepper-step editable :complete="e6 > 2" step="2">Operation Details</v-stepper-step>
+          <v-stepper-content step="2">
+            <OperationDetails ref="operationdetails" />
+          </v-stepper-content>
+
+          <v-stepper-step editable :complete="e6 > 3" step="3">Operation Locations</v-stepper-step>
+
+          <v-stepper-content step="3">
+            <v-layout mt-4>
+              <subheader>Do you have additional operation locations?</subheader>
+            </v-layout>
+            <v-radio-group v-model="row" row>
+              <v-radio label="Yes" value="radio-1"></v-radio>
+              <v-radio label="No" value="radio-2"></v-radio>
+            </v-radio-group>
+            <!-- <OperationLocation ref="operationlocation" /> -->
+            <v-card-title primary-title>
+              <h2>Operation Location(s)</h2>
+            </v-card-title>
+
+            <!-- <div v-for="(child, index) in children">
+              <component :is="child" :key="child.name" v-bind:number="index+1"></component>
+            </div>-->
+
+            <div v-for="(location, index) in locations">
+              <OperationLocation ref="operationlocation1" v-bind:number="index+1" />
+            </div>
+
+            <v-btn @click="addLocation()">
+              <v-btn-text>Add</v-btn-text>
+              <v-icon dark>add</v-icon>
+            </v-btn>
+
+            <v-btn @click="removeLocation()">
+              <v-btn-text>Remove</v-btn-text>
+              <v-icon dark>remove</v-icon>
+            </v-btn>
+          </v-stepper-content>
+
+          <v-stepper-step editable :complete="e6 > 4" step="4">Animal Identification</v-stepper-step>
           <AnimalIdentification ref="animalidentification" />
-        </div>
+
+          <v-stepper-step editable :complete="e6 > 5" step="5">Breeding Details</v-stepper-step>
+          <BreedingDetails ref="breedingdetails" />
+        </v-stepper>
 
         <v-btn
           large
@@ -42,7 +83,7 @@
         >Submit</v-btn>
       </v-container>
     </v-content>
-  </div>
+  </v-app>
 </template>
 
 
@@ -52,7 +93,7 @@ import Profile from "@/components/Profile";
 import OperationLocation from "@/components/OperationLocation";
 import AnimalIdentification from "@/components/AnimalIdentification";
 import BreedingDetails from "@/components/BreedingDetails";
-import MenuOperationLocation from "@/components/MenuOperationLocation";
+//import Footer from "@/components/Footer";
 import axios from "axios";
 
 export default {
@@ -62,97 +103,151 @@ export default {
     OperationDetails,
     OperationLocation,
     AnimalIdentification,
-    BreedingDetails,
-    MenuOperationLocation
+    BreedingDetails
   },
   data() {
     return {
       e6: 1,
       errors: [],
+      locations: []
     };
   },
   methods: {
     createOperator() {
       console.log("Submit clicked");
-      let addresses = [ 
-        {
-          type: "PRI",
-          street_num: this.$store.getters["profile/streetNumber"], 
-          suite: this.$store.getters["profile/aptNumber"],
-          street_name: this.$store.getters["profile/streetName"],
-          city: this.$store.getters["profile/city"],
-          postal_code: this.$store.getters["profile/postalCode"]
-        },
-      ];
-      this.$store.getters["operationLocations/locations"].forEach((location) => {
-        addresses.push({
-          type: "OPN",
-          street_num: location.streetNumber,
-          suite: location.aptNumber,
-          street_name: location.streetName,
-          city: location.city,
-          postal_code: location.postalCode
-        });
-      });
-      let obj = {
-        first_name: this.$store.getters["profile/firstName"],
-        middle_name: this.$store.getters["profile/middleName"],
-        last_name: this.$store.getters["profile/lastName"],
-        comm_pref: this.$store.getters["profile/commType"],
-        phone_num: this.$store.getters["profile/phone"],
-        email_address: this.$store.getters["profile/email"],
-        operation_type: this.$store.getters["operationDetails/operationType"],
-        operation_name: this.$store.getters["operationDetails/operationName"],
-        operation_URL: this.$store.getters["operationDetails/opWebsite"],
 
-        addresses: addresses,
-        associations: [
-          {
-            assoc_name: this.$store.getters["operationDetails/assocName"],
-            membership_num: this.$store.getters["operationDetails/assocMembership"],
-            assoc_URL: this.$store.getters["operationDetails/assocWebsite"]
-          }
-        ],
-        risk_factor_animals: [
-          {
-            num_dogs_intact: this.$store.getters["breedingDetails/femaleIntactDogNum"],
-            num_litter_whelped: this.$store.getters["breedingDetails/littersWhelped"],
-            num_cats_intact: this.$store.getters["breedingDetails/femaleIntactCatNum"],
-            num_litter_queened: this.$store.getters["breedingDetails/littersQueened"],
-            num_dog_sold: this.$store.getters["breedingDetails/dogsSold"],
-            num_dog_transferred: this.$store.getters["breedingDetails/dogsTransferred"],
-            num_dog_traded: this.$store.getters["breedingDetails/dogsTraded"],
-            num_dog_leased: this.$store.getters["breedingDetails/dogsLeased"],
-            num_cat_sold: this.$store.getters["breedingDetails/catsSold"],
-            num_cat_transferred: this.$store.getters["breedingDetails/catsTransferred"],
-            num_cat_traded: this.$store.getters["breedingDetails/catsTraded"],
-            num_cat_leased: this.$store.getters["breedingDetails/catsLeased"]
-          }
-        ],
-        risk_factor_operations: [
-          {
-            accidental_breeding: this.$store.getters["breedingDetails/accidentalBreeding"],
-            num_workers: this.$store.getters["breedingDetails/numWorkers"],
-            animal_type: this.$store.getters["breedingDetails/animalType"],
-            num_breeds_dogs: this.$store.getters["breedingDetails/numDogBreeds"],
-            num_breeds_cats: this.$store.getters["breedingDetails/numCatBreeds"],
-            has_vet: this.$store.getters["breedingDetails/hasVet"],
-            has_perm_id: this.$store.getters["animalIdentification/hasPermId"],
-            perm_id_type: this.$store.getters["animalIdentification/permIdType"],
-            perm_id_other: this.$store.getters["animalIdentification/otherPermIdType"]
-          }
-        ]
-      };
-      console.log(obj);
       axios
-        .post("/api/operator/", obj)
-        .then(response => {console.log(response)})
+        .post("/api/operator/", {
+          first_name: this.$refs.profile.firstname,
+          middle_name: this.$refs.profile.middlename,
+          last_name: this.$refs.profile.lastname,
+          comm_pref: this.$refs.profile.commType,
+          phone_num: this.$refs.profile.phone,
+          email_address: this.$refs.profile.email,
+          operation_type: this.$refs.operationdetails.operationType,
+          operation_name: this.$refs.operationdetails.operationName,
+          operation_URL: this.$refs.operationdetails.opWebsite,
+
+          addresses: [
+            {
+              type: "PRI",
+              street_num: this.$refs.profile.streetNumber,
+              suite: this.$refs.profile.aptNumber,
+              street_name: this.$refs.profile.streetName,
+              city: this.$refs.profile.city,
+              postal_code: this.$refs.profile.postalCode
+            }
+            // {
+            //   type: "OP",
+            //   street_num: this.$refs.operationlocation1.streetNumber,
+            //   suite: this.$refs.operationlocation1.aptNumber,
+            //   street_name: this.$refs.operationlocation1.streetName,
+            //   city: this.$refs.operationlocation1.city,
+            //   postal_code: this.$refs.operationlocation1.postalCode
+            // }
+          ],
+          associations: [
+            {
+              assoc_name: this.$refs.operationdetails.assocName,
+              membership_num: this.$refs.operationdetails.assocMembership,
+              assoc_URL: this.$refs.operationdetails.assocWebsite
+            }
+          ],
+          risk_factor_animals: [
+            {
+              num_dogs_intact: this.$refs.breedingdetails.femaleDogNum,
+              num_litter_whelped: this.$refs.breedingdetails.littersWhelped,
+              num_cats_intact: this.$refs.breedingdetails.femaleIntactCat,
+              num_litter_queened: this.$refs.breedingdetails.littersQueened,
+              num_dog_sold: this.$refs.breedingdetails.dogsSold,
+              num_dog_transferred: this.$refs.breedingdetails.dogsTransferred,
+              num_dog_traded: this.$refs.breedingdetails.dogsTraded,
+              num_dog_leased: this.$refs.breedingdetails.dogsLeased,
+              num_cat_sold: this.$refs.breedingdetails.catsSold,
+              num_cat_transferred: this.$refs.breedingdetails.catsTransferred,
+              num_cat_traded: this.$refs.breedingdetails.catsTraded,
+              num_cat_leased: this.$refs.breedingdetails.catsLeased
+            }
+          ],
+          risk_factor_operations: [
+            {
+              accidental_breeding: this.$refs.operationdetails.accident,
+              num_workers: this.$refs.operationdetails.numWorkers,
+              animal_type: this.$refs.operationdetails.animalType,
+              num_breeds_dogs: this.$refs.operationdetails.numDogBreeds,
+              num_breeds_cats: this.$refs.operationdetails.numCatBreeds,
+              has_vet: this.$refs.operationdetails.hasVet,
+              has_perm_id: this.$refs.animalidentification.hasId,
+              perm_id_type: this.$refs.animalidentification.idType,
+              perm_id_other: this.$refs.animalidentification.otherId
+            }
+          ]
+        })
+        .then(response => {})
         .catch(e => {
           this.errors.push(e);
         });
       this.$router.push("payment");
     },
-  },
+    addLocation() {
+      this.locations.push(OperationLocation);
+    },
+    removeLocation() {
+      this.locations.pop();
+    },
+    prepopulate() {
+      this.$refs.profile.firstname = "Anissa";
+      this.$refs.profile.middlename = "none";
+      this.$refs.profile.lastname = "Agahcnen";
+      this.$refs.profile.commType = "Email";
+      this.$refs.profile.phone = "243-322-1234";
+      this.$refs.profile.email = "john@smith.com";
+      this.$refs.profile.streetNumber = "1";
+      this.$refs.profile.aptNumber = "2";
+      this.$refs.profile.streetName = "Douglas";
+      this.$refs.profile.city = "Duncan";
+      this.$refs.profile.postalCode = "V6R 5T6";
+
+      // this.$refs.operationlocation1.streetNumber = "45";
+      // this.$refs.operationlocation1.aptNumber = "21";
+      // this.$refs.operationlocation1.streetName = "Cook";
+      // this.$refs.operationlocation1.city = "Nanaimo";
+      // this.$refs.operationlocation1.postalCode = "R5T 5R5";
+
+      // this.locations[0].streetNumber = "45";
+
+      this.$refs.breedingdetails.femaleDogNum = 1;
+      this.$refs.breedingdetails.littersWhelped = 2;
+      this.$refs.breedingdetails.femaleIntactCat = 3;
+      this.$refs.breedingdetails.littersQueened = 4;
+      this.$refs.breedingdetails.dogsSold = 5;
+      this.$refs.breedingdetails.dogsTransferred = 6;
+      this.$refs.breedingdetails.dogsTraded = 7;
+      this.$refs.breedingdetails.dogsLeased = 8;
+      this.$refs.breedingdetails.catsSold = 9;
+      this.$refs.breedingdetails.catsTransferred = 10;
+      this.$refs.breedingdetails.catsTraded = 11;
+      this.$refs.breedingdetails.catsLeased = 12;
+
+      this.$refs.operationdetails.operationType = "SELLER";
+      this.$refs.operationdetails.operationName = "Abe dogs";
+      this.$refs.operationdetails.opWebsite = "https://abcdogs.com";
+      this.$refs.operationdetails.assocName = "ABC Assoc";
+      this.$refs.operationdetails.assocMembership = "1234";
+      this.$refs.operationdetails.assocWebsite =
+        "https://www.abc-associations.com";
+      this.$refs.operationdetails.accident = "true";
+      this.$refs.operationdetails.numWorkers = 1;
+      this.$refs.operationdetails.animalType = "DOG";
+      this.$refs.operationdetails.numDogBreeds = 1;
+      this.$refs.operationdetails.numCatBreeds = 2;
+      this.$refs.operationdetails.hasVet = "false";
+
+      this.$refs.animalidentification.hasId = "true";
+      this.$refs.animalidentification.idType = "MICROCHIP";
+      // this.$refs.animalidentification.otherId = null;
+    }
+  }
 };
 </script>
 

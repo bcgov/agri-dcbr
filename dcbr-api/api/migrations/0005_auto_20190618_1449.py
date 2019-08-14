@@ -17,6 +17,6 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='risk_factor_operation',
             name='animal_type',
-            field=models.CharField(choices=[('DOG', 'dog'), ('CAT', 'cat'), ('DOG&CAT', 'dog & cat')], default='DOG&CAT', max_length=10),
+            field=models.CharField(choices=[('DOG', 'dog'), ('CAT', 'cat'), ('DOG & CAT', 'dog & cat')], default='DOG & CAT', max_length=10),
         ),
     ]

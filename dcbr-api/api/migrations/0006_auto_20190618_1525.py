@@ -13,6 +13,6 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='risk_factor_operation',
             name='animal_type',
-            field=models.CharField(choices=[('DOG', 'DOG'), ('CAT', 'CAT'), ('DOG&CAT', 'DOG&CAT')], default='DOG&CAT', max_length=10),
+            field=models.CharField(choices=[('DOG', 'DOG'), ('CAT', 'CAT'), ('DOG & CAT', 'DOG & CAT')], default='DOG & CAT', max_length=10),
         ),
     ]

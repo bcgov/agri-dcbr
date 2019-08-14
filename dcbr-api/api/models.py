@@ -11,11 +11,11 @@ class Operator(models.Model):
 
     BREEDER = "BREEDER"
     SELLER = "SELLER"
-    BOTH = "BREEDER&SELLER"
+    BOTH = "BREEDER & SELLER"
     OPERATION_TYPE_CHOICES = (
         (BREEDER, "BREEDER"),
         (SELLER, "SELLER"),
-        (BOTH, "BREEDER&SELLER"),
+        (BOTH, "BREEDER & SELLER"),
     )
 
     description = _("An operator is a seller/breeder of cats and/or dogs")
@@ -28,11 +28,8 @@ class Operator(models.Model):
     create_timestamp = models.DateTimeField(auto_now_add=True)
     update_timestamp = models.DateTimeField(auto_now=True)
     CONTACT_METHOD_CHOICE = ((EMAIL, "email"), (MAIL, "mail"))
-    comm_pref = models.CharField(
-        "Communication method",
-        max_length=10,
-        choices=CONTACT_METHOD_CHOICE,
-        default=EMAIL
+    comm_pref = models.CharField("Communication method",
+        max_length=10, choices=CONTACT_METHOD_CHOICE, default=EMAIL
     )
     operation_type = models.CharField(
         max_length=20, choices=OPERATION_TYPE_CHOICES, default=BREEDER
@@ -40,10 +37,10 @@ class Operator(models.Model):
 
     operation_name = models.CharField(max_length=50, default="", blank=True)
     operation_URL = models.CharField(max_length=50, default="", blank=True)
+   
 
     def __str__(self):
         return "Reg ID: \t %s %s , %s" % (self.reg_num, self.last_name, self.first_name)
-    
 
     def save(self, *args, **kwargs):
         # self.slug = slugify(self.regNum)
@@ -61,7 +58,10 @@ class Operator(models.Model):
 class Address(models.Model):
     PRIMARY = "PRI"
     OPERATION = "OPN"
-    TYPE_CHOICES = ((PRIMARY, "Primary"), (OPERATION, "Operation"),)
+    TYPE_CHOICES = (
+        (PRIMARY, "Primary"),
+        (OPERATION, "Operation"),
+    )
     type = models.CharField(max_length=3, choices=TYPE_CHOICES, default=PRIMARY)
     street_num = models.IntegerField(default=0, validators=[MinValueValidator(0)])
     suite = models.CharField(max_length=32, default="", blank=True)
@@ -81,6 +81,7 @@ class Address(models.Model):
 
     def __str__(self):
         return self.street_name
+
 
     def save(self, *args, **kwargs):
         # self.operator = self.operator
@@ -103,9 +104,9 @@ class Risk_Factor_Operation(models.Model):
 
     DOG = "DOG"
     CAT = "CAT"
-    BOTH = "DOG&CAT"
+    BOTH = "DOG & CAT"
 
-    ANIMAL_TYPE_CHOICES = ((DOG, "DOG"), (CAT, "CAT"), (BOTH, "DOG&CAT"),)
+    ANIMAL_TYPE_CHOICES = ((DOG, "DOG"), (CAT, "CAT"), (BOTH, "DOG & CAT"))
     accidental_breeding = models.BooleanField(default=False)
     num_workers = models.IntegerField(default=0, validators=[MinValueValidator(0)])
     animal_type = models.CharField(
@@ -156,15 +157,11 @@ class Risk_Factor_Animal(models.Model):
         default=0, validators=[MinValueValidator(0)]
     )
     num_dog_sold = models.IntegerField(default=0, validators=[MinValueValidator(0)])
-    num_dog_transferred = models.IntegerField(
-        default=0, validators=[MinValueValidator(0)]
-    )
+    num_dog_transferred = models.IntegerField(default=0, validators=[MinValueValidator(0)])
     num_dog_traded = models.IntegerField(default=0, validators=[MinValueValidator(0)])
     num_dog_leased = models.IntegerField(default=0, validators=[MinValueValidator(0)])
     num_cat_sold = models.IntegerField(default=0, validators=[MinValueValidator(0)])
-    num_cat_transferred = models.IntegerField(
-        default=0, validators=[MinValueValidator(0)]
-    )
+    num_cat_transferred = models.IntegerField(default=0, validators=[MinValueValidator(0)])
     num_cat_traded = models.IntegerField(default=0, validators=[MinValueValidator(0)])
     num_cat_leased = models.IntegerField(default=0, validators=[MinValueValidator(0)])
     created_date = models.DateTimeField(auto_now_add=True)

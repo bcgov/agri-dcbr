@@ -14,32 +14,30 @@
 
               <!-- Type of Operator -->
               <v-layout mx-2 mt-4>
-                <v-subheader>Do you maintain a permanent identification of your animals?</v-subheader>
+                <subheader>Do you maintain a permanent identification of your animals?</subheader>
               </v-layout>
               <v-layout mx-2>
-                <v-radio-group v-model="hasPermId" name="hasPermId" row>
-                  <v-radio label="Yes" :value="true"></v-radio>
-                  <v-radio label="No" :value="false"></v-radio>
+                <v-radio-group v-model="hasId" row>
+                  <v-radio label="Yes" value="true"></v-radio>
+                  <v-radio label="No" value="false"></v-radio>
                 </v-radio-group>
               </v-layout>
               <!-- Type of Animal -->
-              <div v-if="hasPermId == true">
-                <v-layout mx-2 mt-4>
-                  <v-subheader>What type of identification technology do you use?</v-subheader>
-                </v-layout>
-                <v-layout mx-2>
-                  <v-radio-group v-model="permIdType" name="permIdType" row>
-                    <v-radio label="Microchip" value="MICROCHIP"></v-radio>
-                    <v-radio label="Tattoo" value="TATTOO"></v-radio>
-                    <v-radio label="Other" value="OTHER"></v-radio>
-                  </v-radio-group>
-                </v-layout>
-                <v-layout row wrap ma-2>
-                  <v-flex xs12 md4 v-if="permIdType == 'OTHER'">
-                    <v-text-field v-model="otherPermIdType" label="Other Method" name="otherPermIdType"></v-text-field>
-                  </v-flex>
-                </v-layout>
-              </div>
+              <v-layout mx-2 mt-4>
+                <subheader>What type of identification technology do you use?</subheader>
+              </v-layout>
+              <v-layout mx-2>
+                <v-radio-group v-model="idType" row>
+                  <v-radio label="Microchip" value="MICROCHIP"></v-radio>
+                  <v-radio label="Tattoo" value="TATTOO"></v-radio>
+                  <v-radio label="Other" value="OTHER"></v-radio>
+                </v-radio-group>
+              </v-layout>
+              <v-layout row wrap ma-2>
+                <v-flex xs12 md4>
+                  <v-text-field v-model="otherId" label="Other Method"></v-text-field>
+                </v-flex>
+              </v-layout>
             </v-container>
           </v-form>
         </v-card>
@@ -51,7 +49,10 @@
 export default {
   data: () => ({
     valid: false,
-    visited: false,
+    hasId: null,
+    idType: null,
+    otherId: "",
+
     nameRules: [
       v => !!v || "Name is required",
       v => v.length <= 50 || "Name must be less than 50 characters"
@@ -61,56 +62,6 @@ export default {
       v => !!v || "E-mail is required",
       v => /.+@.+/.test(v) || "E-mail must be valid"
     ]
-  }),
-
-  computed: {
-    hasPermId: {
-      // getter
-      get() {
-        if (this.visited == false) {
-          return "";
-        } else {
-          return this.$store.getters["animalIdentification/hasPermId"];
-        }
-      },
-      // setter
-      set(value) {
-        if (this.hasPermId == "") {
-          this.visited = true;
-        }
-        console.log(value);
-        this.$store.dispatch("animalIdentification/hasPermId", value);
-        if (value == false) {
-          this.$store.dispatch("animalIdentification/permIdType", "");
-          this.$store.dispatch("animalIdentification/otherPermIdType", "");
-        }
-      },
-    },
-    permIdType: {
-      // getter
-      get() {
-        return this.$store.getters["animalIdentification/permIdType"];
-      },
-      // setter
-      set(value) {
-        console.log(value);
-        this.$store.dispatch("animalIdentification/permIdType", value);
-        if (value != "OTHER") {
-          this.$store.dispatch("animalIdentification/otherPermIdType", "");
-        }
-      },
-    },
-    otherPermIdType: {
-      // getter
-      get() {
-        return this.$store.getters["animalIdentification/otherPermIdType"];
-      },
-      // setter
-      set(value) {
-        console.log(value);
-        this.$store.dispatch("animalIdentification/otherPermIdType", value);
-      },
-    }
-  }
+  })
 };
 </script>

@@ -11,7 +11,7 @@
               <!-- Home address section  -->
 
               <v-layout row mt-3 mx-2>
-                <h4>Address {{number+1}}</h4>
+                <h4>Address {{number}}</h4>
               </v-layout>
               <v-layout row wrap mx-2>
                 <v-flex xs12 md4>
@@ -53,92 +53,21 @@
   </v-container>
 </template>
 <script>
-import {mapState} from "vuex";
 export default {
   props: ["number"],
   data: () => ({
     valid: false,
+    aptNumber: "",
+    streetName: "",
+    postalCode: "",
+    city: "",
     nameRules: [
       v => !!v || "Name is required",
       v => v.length <= 50 || "Name must be less than 50 characters"
     ],
+    streetNumber: "",
     streetNumberRules: [v => !!v || "Street number is required"]
   }),
-  methods: {},
-  computed: {
-    ...mapState({
-      operationLocations: state => state.operationLocations
-    }),
-    streetName: {
-      // getter
-      get() {
-        return this.$store.getters["operationLocations/locations"][this.$props.number].streetName
-      },
-      // setter
-      set(value) {
-        this.$store.dispatch("operationLocations/updateLocationProperty", {
-          index: this.$props.number,
-          property: "streetName",
-          value: value,
-        });
-      }
-    },
-    aptNumber: {
-      // getter
-      get() {
-        return this.$store.getters["operationLocations/locations"][this.$props.number].aptNumber
-      },
-      // setter
-      set(value) {
-        this.$store.dispatch("operationLocations/updateLocationProperty", {
-          index: this.$props.number,
-          property: "aptNumber",
-          value: value,
-        });
-      }
-    },
-    streetNumber: {
-      // getter
-      get() {
-        return this.$store.getters["operationLocations/locations"][this.$props.number].streetNumber || ""
-      },
-      // setter
-      set(value) {
-        this.$store.dispatch("operationLocations/updateLocationProperty", {
-          index: this.$props.number,
-          property: "streetNumber",
-          value: value,
-        });
-      }
-    },
-    city: {
-      // getter
-      get() {
-        return this.$store.getters["operationLocations/locations"][this.$props.number].city
-      },
-      // setter
-      set(value) {
-        this.$store.dispatch("operationLocations/updateLocationProperty", {
-          index: this.$props.number,
-          property: "city",
-          value: value,
-        });
-      }
-    },
-    postalCode: {
-      // getter
-      get() {
-        return this.$store.getters["operationLocations/locations"][this.$props.number].postalCode
-      },
-      // setter
-      set(value) {
-        this.$store.dispatch("operationLocations/updateLocationProperty", {
-          index: this.$props.number,
-          property: "postalCode",
-          value: value,
-        });
-      }
-    },
-  }
+  methods: {}
 };
 </script>

@@ -13,6 +13,6 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='operator',
             name='operation_type',
-            field=models.CharField(choices=[('BREEDER', 'BREEDER'), ('SELLER', 'SELLER'), ('BREEDER&SELLER', 'BREEDER&SELLER')], default='BREEDER', max_length=20),
+            field=models.CharField(choices=[('BREEDER', 'BREEDER'), ('SELLER', 'SELLER'), ('BREEDER & SELLER', 'BREEDER & SELLER')], default='BREEDER', max_length=20),
         ),
     ]
