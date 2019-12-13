@@ -162,7 +162,7 @@ configureEnvironment() {
 
   if [ "$COMMAND" == "start" ] || [ "$COMMAND" == "start-api" ] || [ "$COMMAND" == "start-dev" ]; then
     if [ -z "$KEYCLOAK_CLIENT_SECRET" ]; then
-      _yellow='\033[0;31m'
+      _yellow='\e[33m'
       _nc='\033[0m' # No Color
 
       echo -e "${_yellow}For Keycloak authentication to work, you must provide a client secret parameter. For example: KEYCLOAK_CLIENT_SECRET=my-client-secret.${_nc}"

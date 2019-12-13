@@ -66,18 +66,11 @@
       "value": "dcbr-db"
     },
     {
-      "name": "GIT_REPO_URL",
-      "displayName": "Git Repo URL",
-      "description": "The URL to your GIT repo.",
+      "name": "OUTPUT_IMAGE_TAG",
+      "displayName": "Output Image Tag",
+      "description": "The tag given to the built image.",
       "required": true,
-      "value": "https://github.com/bcgov/agri-dcbr.git"
-    },
-    {
-      "name": "GIT_REF",
-      "displayName": "Git Reference",
-      "description": "The git reference or branch.",
-      "required": true,
-      "value": "master"
+      "value": "latest"
     },
     {
       "name": "SOURCE_IMAGE_KIND",
@@ -89,21 +82,14 @@
     {
       "name": "SOURCE_IMAGE_NAME",
       "displayName": "Source Image Name",
-      "required": true,
       "description": "The name of the source image.",
+      "required": true,
       "value": "registry.access.redhat.com/rhscl/postgresql-10-rhel7"
     },
     {
       "name": "SOURCE_IMAGE_TAG",
       "displayName": "Source Image Tag",
-      "required": true,
       "description": "The tag of the source image.",
-      "value": "latest"
-    },
-    {
-      "name": "OUTPUT_IMAGE_TAG",
-      "displayName": "Output Image Tag",
-      "description": "The tag given to the built image.",
       "required": true,
       "value": "latest"
     }

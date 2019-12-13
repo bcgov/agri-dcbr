@@ -1,12 +1,10 @@
 #=========================================================
 # OpenShift template parameters for:
 # Component: dcbr-db
-# Template File: templates/dcbr-db-build.json
+# Template File: ../dcbr-db/openshift/templates/dcbr-db-build.json
 #=========================================================
 NAME=dcbr-db
-GIT_REPO_URL=https://github.com/bcgov/agri-dcbr.git
-GIT_REF=master
+OUTPUT_IMAGE_TAG=latest
 SOURCE_IMAGE_KIND=DockerImage
 SOURCE_IMAGE_NAME=registry.access.redhat.com/rhscl/postgresql-10-rhel7
 SOURCE_IMAGE_TAG=latest
-OUTPUT_IMAGE_TAG=latest
