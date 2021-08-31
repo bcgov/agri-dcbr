@@ -25,3 +25,9 @@ As the industry is unregulated and for the most part unknown the DCBR will serve
   4. DCBR owned by government but with ability to be operated by potential designated agency; and
 
   5. Provide important operational status information to consumers including a registration number that consumers will learn to ask for in making purchases.
+
+## Archived KeyCloak settings
+
+On Tuesday, August 31, 2021 we exported the configuration from TEST and PROD KeyCloak instances (`6pawtqei` namespace).  They are in the [backup](./keycloak/backup/) folder. 
+
+Gary.T.Wong@gov.bc.ca 
