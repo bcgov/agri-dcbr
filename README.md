@@ -28,6 +28,6 @@ As the industry is unregulated and for the most part unknown the DCBR will serve
 
 ## Archived KeyCloak settings
 
-On Tuesday, August 31, 2021 we exported the configuration from TEST and PROD KeyCloak instances (`6pawtqei` namespace).  They are in the [backup](./keycloak/backup/) folder. 
+On Tuesday, August 31, 2021 we exported the configuration from TEST and PROD KeyCloak instances (`uicn0kkh` namespace).  They are in the [backup](./keycloak/backup/) folder. 
 
 Gary.T.Wong@gov.bc.ca 
